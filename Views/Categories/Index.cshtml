@@ -1,0 +1,106 @@
+﻿@model IEnumerable<MVC.Models.Category>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<div id="NewCad" class="alert alert-success"  style="display:none">
+
+</div>
+<img src="~/images/download.png" alt="load" id="load" style="display:none" />
+@using (Ajax.BeginForm("AddCat",new AjaxOptions() {
+
+    UpdateTargetId= "NewCat",
+    HttpMethod="Post",
+    InsertionMode = InsertionMode.Replace,
+    //LoadingElementId="load"
+}))
+{
+
+    <div class="form-horizontal">
+        <h4>Category</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.Label("Category Name", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.Editor("CatName", new { htmlAttributes = new { @class = "form-control" } })
+               
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.Label("Description", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.Editor("Descripion", new { htmlAttributes = new { @class = "form-control" } })
+             
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Create" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+
+
+}
+
+    <div id="NewCat" class="form-horizontal">
+
+
+        <table class="table">
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Name)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Descripion)
+                </th>
+                <th></th>
+            </tr>
+
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Descripion)
+                    </td>
+                    <td>
+                        @Html.ActionLink("Edit", "Edit", new { id = item.ID }) |
+                        @Html.ActionLink("Details", "Details", new { id = item.ID }) |
+
+                        @*@using (Ajax.BeginForm("DeletCat", new AjaxOptions()
+                        {
+
+                            UpdateTargetId = "NewCat",
+                            HttpMethod = "Post",
+                            InsertionMode = InsertionMode.Replace,
+                            
+                        }))
+                        {
+                            <input type="hidden"  name="CatName" value="@item.ID"/>
+                            <input type="submit" value="Delete" />
+                        }*@
+                        @Ajax.ActionLink("Delete", "DeletCat", new { id = item.ID },new AjaxOptions() {
+
+                           UpdateTargetId = "NewCat",
+                           HttpMethod = "Get",
+                           InsertionMode = InsertionMode.Replace,
+
+                        })
+                    </td>
+                </tr>
+            }
+
+        </table>
+    </div>
